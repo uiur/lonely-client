@@ -1,3 +1,5 @@
+.PHONY: test build clean installdeps
+
 NAME := lonely
 
 GOVERSION=$(shell go version)
@@ -11,13 +13,14 @@ all: build-linux-arm
 build-linux-arm:
 	@$(MAKE) build GOOS=linux GOARCH=arm
 
-.PHONY: test build
-
 build:
 	go build -o build/$(GOOS)_$(GOARCH)/$(NAME)
 
 test:
-	go test
+	go test -v ./...
 
 clean:
-	rm build/*
+	rm -rf build/*
+
+installdeps:
+	go get -t -d -v ./...
