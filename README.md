@@ -1,3 +1,6 @@
+# lonely-client
+[![CircleCI](https://circleci.com/gh/uiureo/lonely-client.svg?style=svg)](https://circleci.com/gh/uiureo/lonely-client)
+
 ## raspberry pi
 requirements:
 
