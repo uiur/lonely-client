@@ -70,7 +70,7 @@ func checkEnv() error {
 
 	host := os.Getenv("LONELY_SERVER_HOST")
 	if host == "" {
-		return cli.NewExitError("$LONELY_DEVICE_HOST is required", 1)
+		return cli.NewExitError("$LONELY_SERVER_HOST is required", 1)
 	}
 
 	return nil
