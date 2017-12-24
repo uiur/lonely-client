@@ -88,7 +88,7 @@ func upload(imagePath string) error {
 		return cli.NewExitError(fmt.Sprintf("error: during a request to create upload: %v \n", err), 1)
 	}
 
-	err = apiClient.uploadImageToS3(uploadResponse.PresignedUrl, imagePath)
+	err = apiClient.UploadImageToS3(uploadResponse.PresignedUrl, imagePath)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("error: during a request to upload image to s3: %v \n", err), 1)
 	}

@@ -26,10 +26,19 @@ func (client *ApiClient) setApiHeaders(req *http.Request) {
 	req.Header.Add("Authorization", "Bearer "+client.Token)
 }
 
-func (client *ApiClient) uploadImageToS3(presignedUrl string, imagePath string) error {
+func (client *ApiClient) UploadImageToS3(presignedUrl string, imagePath string) error {
 	buf, err := ioutil.ReadFile(imagePath)
 	if err != nil {
 		return err
+	}
+
+	if len(buf) == 0 {
+		return fmt.Errorf("input image is empty")
+	}
+
+	contentType := http.DetectContentType(buf)
+	if contentType != "image/jpeg" {
+		return fmt.Errorf("unexpected content type: %s", contentType)
 	}
 
 	req, _ := http.NewRequest(http.MethodPut, presignedUrl, bytes.NewReader(buf))
