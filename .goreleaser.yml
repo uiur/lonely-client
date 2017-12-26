@@ -1,0 +1,6 @@
+builds:
+  - binary: lonely
+    goos:
+      - linux
+    goarch:
+      - arm
