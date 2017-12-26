@@ -43,9 +43,16 @@ func (client *ApiClient) UploadImageToS3(presignedUrl string, imagePath string) 
 
 	req, _ := http.NewRequest(http.MethodPut, presignedUrl, bytes.NewReader(buf))
 	req.Header.Add("Content-Type", "image/jpeg")
-	_, err = client.httpClient().Do(req)
+	resp, err := client.httpClient().Do(req)
+	if err != nil {
+		return err
+	}
 
-	return err
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("uploading to s3 failed: %s\n", resp.Status)
+	}
+
+	return nil
 }
 
 func (client *ApiClient) httpClient() *http.Client {
@@ -59,6 +66,9 @@ func (client *ApiClient) createUpload() (*PostUploadsResponse, error) {
 	resp, err := client.httpClient().Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("server returns error: %s\n", resp.Status)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -85,7 +95,14 @@ func (client *ApiClient) createImage(timestamp int64) error {
 
 	client.setApiHeaders(req)
 
-	_, err = client.httpClient().Do(req)
+	resp, err := client.httpClient().Do(req)
+	if err != nil {
+		return err
+	}
 
-	return err
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("server returns error: %s", resp.Status)
+	}
+
+	return nil
 }

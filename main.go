@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -34,10 +35,12 @@ func main() {
 
 				imagePath := dir + "/snapshot.jpg"
 
+				log.Println("start capturing an image")
 				err = capture(imagePath)
 				if err != nil {
 					return err
 				}
+				log.Println("finish capturing an image")
 
 				err = upload(imagePath)
 
@@ -84,18 +87,20 @@ func upload(imagePath string) error {
 
 	apiClient := &ApiClient{Host: host, Token: token}
 
+	log.Println("start creating upload")
 	uploadResponse, err := apiClient.createUpload()
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("error: during a request to create upload: %v \n", err), 1)
 	}
 
+	log.Println("start uploading image to s3")
 	err = apiClient.UploadImageToS3(uploadResponse.PresignedUrl, imagePath)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("error: during a request to upload image to s3: %v \n", err), 1)
 	}
 
+	log.Println("start registering image")
 	err = apiClient.createImage(uploadResponse.Timestamp)
-
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("error: during a request to register image: %v", err), 1)
 	}
