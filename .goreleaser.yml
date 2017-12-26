@@ -1,0 +1,7 @@
+builds:
+  - main: main.go
+    binary: lonely
+    goos:
+      - linux
+    goarch:
+      - arm
