@@ -15,7 +15,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "lonely"
 	app.Usage = "lonely client"
-	app.Version = "0.0.1"
+	app.Version = "0.0.3"
 
 	app.Commands = []cli.Command{
 		{
